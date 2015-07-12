@@ -1,0 +1,25 @@
+{
+  "name": "node-slack-mailgun",
+  "version": "0.0.0",
+  "description": "Slack integration for Mailgun notifications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slickplaid/node-slack-mailgun.git"
+  },
+  "keywords": [
+    "slack",
+    "mailgun",
+    "notifications",
+    "webhook"
+  ],
+  "author": "Evan Johnson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/slickplaid/node-slack-mailgun/issues"
+  },
+  "homepage": "https://github.com/slickplaid/node-slack-mailgun#readme"
+}
