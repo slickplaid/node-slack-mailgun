@@ -121,4 +121,9 @@ describe('getTemplate', function() {
 			message.text.should.equal('joe@domain.com clicked on https://mg.exampledomain.com/path');
 		});
 	});
+
+	// stubs
+	it('allow attachments');
+	it('allow custom function attachments');
+
 });

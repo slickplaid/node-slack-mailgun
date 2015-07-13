@@ -4,7 +4,7 @@ var getOptions = require('../lib/getOptions');
 describe('Option Defaults', function() {
 
 	describe('Slack', function() {
-		it('Throw if no Slack apikey', function() {
+		it('Throw if no Slack hook url', function() {
 			expect(getOptions).to.throw(Error);
 		});
 
@@ -24,7 +24,7 @@ describe('Option Defaults', function() {
 			var opts = getOptions({ slack: slackOpts });
 			expect(opts.mailgun).to.exist;
 		});
-		
+
 		it('Allow no API key', function() {
 			var opts = getOptions({ slack: slackOpts });
 			expect(opts.mailgun.apikey).to.not.exist;

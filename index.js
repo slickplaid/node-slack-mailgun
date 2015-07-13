@@ -10,6 +10,7 @@
  * Module dependencies.
  * @private
  */
+//process.env.DEBUG = 'node-slack-mailgun';
 
 var Debug = require('debug');
 var debug = Debug('node-slack-mailgun');
@@ -26,6 +27,7 @@ module.exports = SlackGun;
 
 function SlackGun(options) {
 	var that = this;
+  that = {};
 
   // Normalize our options and log/throw any problems.
 	that.options = getOptions(options);
@@ -42,9 +44,9 @@ function SlackGun(options) {
 
     if(that.options.mailgun.apikey) {
       var apikey = that.options.mailgun.apikey;
-      var token = req.headers.token;
-      var timestamp = req.headers.timestamp;
-      var signature = req.headers.signature;
+      var token = req.body.token;
+      var timestamp = req.body.timestamp;
+      var signature = req.body.signature;
 
       var verification = verifyMailgun(apikey, token, timestamp, signature);
 
@@ -64,7 +66,8 @@ function SlackGun(options) {
           debug(err);
         } else if(message) {
           debug('Sending rendered message to Slack.');
-          that.slack.send(message);
+          that.slack.send(message, function(err, ok) {
+          });
         }
       });
 

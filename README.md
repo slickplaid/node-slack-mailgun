@@ -1,4 +1,4 @@
-# Slack Mailgun (SlackGun)
+# Slack Mailgun (SlackGun) [![Build Status](https://travis-ci.org/slickplaid/node-slack-mailgun.svg?branch=master)](https://travis-ci.org/slickplaid/node-slack-mailgun)
 
 Slack Mailgun (SlackGun) is a simple webhook system to make it easy to route [Mailgun's](http://mailgun.com) [Webhooks](https://documentation.mailgun.com/user_manual.html#webhooks) to [Slack](https://slack.com/). This was built because there existed no simple way that I saw that could map Mailgun to Slack without [paying](https://zapier.com/app/pricing) an arm and a leg for it.
 
