@@ -24,7 +24,6 @@
   "homepage": "https://github.com/slickplaid/node-slack-mailgun#readme",
   "devDependencies": {
     "chai": "^3.0.0",
-    "express": "^4.13.1",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.1",
     "gulp-git": "^1.2.4",
@@ -38,6 +37,7 @@
     "body-parser": "^1.13.2",
     "commander": "^2.8.1",
     "debug": "^2.2.0",
+    "express": "^4.13.1",
     "mustache": "^2.1.2",
     "node-slack": "0.0.7"
   },
