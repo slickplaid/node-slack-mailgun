@@ -54,14 +54,15 @@ describe('getTemplate', function() {
 		});
 	});
 
-	it('Ignore templates set to false', function() {
+	it('Ignore event types set to false', function() {
 		var customOptions = { slack: slackOpts };
 		customOptions.templates = {
 			clicked: false
 		};
 
 		getTemplate(body, customOptions, function(err, message) {
-			expect(message.text).to.not.be.empty;
+			expect(err).to.not.be.empty;
+			expect(message).to.be.empty;
 		});
 	});
 
