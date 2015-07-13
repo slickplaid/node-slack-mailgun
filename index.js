@@ -67,6 +67,11 @@ function SlackGun(options) {
         } else if(message) {
           debug('Sending rendered message to Slack.');
           that.slack.send(message, function(err, ok) {
+            if(err) {
+              debug(err);
+            } else {
+              debug(ok);
+            }
           });
         }
       });
