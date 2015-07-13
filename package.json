@@ -16,10 +16,24 @@
     "notifications",
     "webhook"
   ],
-  "author": "Evan Johnson",
+  "author": "Evan Johnson - Slick Labs, LLC <evan@slicklabs.io>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/slickplaid/node-slack-mailgun/issues"
   },
-  "homepage": "https://github.com/slickplaid/node-slack-mailgun#readme"
+  "homepage": "https://github.com/slickplaid/node-slack-mailgun#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-bump": "^0.3.1",
+    "gulp-git": "^1.2.4",
+    "gulp-util": "^3.0.6",
+    "minimist": "^1.1.1",
+    "mocha": "^2.2.5",
+    "run-sequence": "^1.1.1"
+  },
+  "dependencies": {
+    "debug": "^2.2.0",
+    "mustache": "^2.1.2",
+    "node-slack": "0.0.7"
+  }
 }
