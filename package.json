@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/slickplaid/node-slack-mailgun#readme",
   "devDependencies": {
-    "body-parser": "^1.13.2",
     "chai": "^3.0.0",
     "express": "^4.13.1",
     "gulp": "^3.9.0",
@@ -36,8 +35,13 @@
     "superagent": "^1.2.0"
   },
   "dependencies": {
+    "body-parser": "^1.13.2",
+    "commander": "^2.8.1",
     "debug": "^2.2.0",
     "mustache": "^2.1.2",
     "node-slack": "0.0.7"
+  },
+  "bin": {
+    "slackgun": "standalone.js"
   }
 }
