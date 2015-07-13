@@ -34,7 +34,27 @@ Now any requests from Mailgun to `/api/mailgun` will be routed to slack as a mes
 
 ### Using it from the command line
 
-> Not yet implemented
+> Not fully implemented
+
+`npm install -g node-slack-mailgun`
+
+Then you should be able to run it from the command line (tested on Linux):
+
+```
+$ slackgun
+
+  Usage: slackgun [options] <hook>
+
+  Options:
+
+    -h, --help              output usage information
+    -V, --version           output the version number
+    -p, --port [port]       Specify Port to Listen On. Default: <3000>
+    -h, --hostname [ip]     Specify hostname to Listen On. Default: <0.0.0.0>
+    -u, --url [url]         Specify URL Endpoint. Default: '/'
+    -m, --mailgun [apikey]  Specify mailgun API key
+    -v, --verbose           Turn on verbose error debugging.
+```
 
 ## Usage
 
@@ -67,7 +87,11 @@ If you want to customize these messages, you have a few options.
 
 Give us a `string` in the options text for slack of that particular type of event, and we'll render it using Mustache and the body of the Mailgun post. You can use any of Slack's input decoractions here as well, such as using \***bold**\* and \_*italics*\_.
 
-If you don't want to write an individual string for each one, just include 'all' in there, and we'll use that for all event types if you don't specifically set one. In the below settings, it would include `[complained, bounced, dropped, delivered]` but not `[opened, clicked, unsubscribed]` because those are specified.
+If you don't want to write an individual string for each one, just include 'all' in there, and we'll use that for all event types if you don't specifically set one. In the below settings, `all` would include `[complained, bounced, dropped, delivered]` but not `[opened, clicked, unsubscribed]` because those are specified.
+
+If you would prefer not to listen or accept an event type, set it to `false` and we will ignore it.
+
+#### Catch all events
 
 ```javascript
 var SlackGun = require('node-slack-mailgun');
@@ -77,10 +101,27 @@ SlackGun({
 		hook: 'url', // Required. The hook URL for posting messages to slack.
 	},
 	templates: { // Options for templates
-		opened: '*{{recipient}}* _{{event}}_ our email.', // "joe@domain.com clicked our email."
+		opened: '*{{recipient}}* _{{event}}_ our email.', // "joe@domain.com opened our email."
 		clicked: '*{{recipient}}* _{{event}}_ {{{url}}}', // "joe@domain.com clicked https://example.com/link"
 		unsubscribed: '*{{recipient}}* _{{event}}_ from {{mailing-list}}', // "joe@domain.com unsubscribed from maillist@mydomain.com"
 		all: '*{{recipient}}*\n*Event:* _{{event}}_' 
+	}
+});
+```
+
+#### Ignore Some Events
+
+```javascript
+var SlackGun = require('node-slack-mailgun');
+
+SlackGun({
+	slack: { // Options for slack
+		hook: 'url', // Required. The hook URL for posting messages to slack.
+	},
+	templates: { // Options for templates
+		opened: false, // ignore this event
+		clicked: '*{{recipient}}* _{{event}}_ {{{url}}}', // "joe@domain.com clicked https://example.com/link"
+		unsubscribed: '*{{recipient}}* _{{event}}_ from {{mailing-list}}', // "joe@domain.com unsubscribed from maillist@mydomain.com"
 	}
 });
 ```
@@ -123,7 +164,7 @@ SlackGun({
 
 ## Tests
 
-Should be available next release.
+`mocha`
 
 ## Honey-Do List
 
