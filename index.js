@@ -14,9 +14,7 @@
 var Debug = require('debug');
 var debug = Debug('node-slack-mailgun');
 var Slack = require('node-slack');
-var mustache = require('mustache');
 var verifyMailgun = require('./lib/mailgun-verify');
-var mustacheTemplates = require('./lib/templates');
 var getTemplate = require('./lib/getTemplate');
 
 /**
@@ -33,8 +31,6 @@ function SlackGun(options) {
 
   // Initalize node-slack
 	that.slack = new Slack(options.slack.hook, options.slack.options);
-
-
 
 	return function SlackGunMiddleware(req, res, next) {
     var err = [];
@@ -55,16 +51,22 @@ function SlackGun(options) {
         authentic = false;
         err.push('Invalid token response. Mailgun message could not be authenticated.');
       }
+    } else {
+      debug('No api key for Mailgun set. Not validating the authenticity of Mailgun\'s request');
     }
 
     if(!req.body) {
       err.push('Unable to get body from Mailgun request.');
     } else {
-      var parsedMessage = getMessage(req.body);
+      getMessage(req.body, that.options, function(err, message) {
+        if(err) {
+          debug(err);
+        } else if(message) {
+          debug('Sending rendered message to Slack.');
+          that.slack.send(message);
+        }
+      });
 
-      if(parsedMessage) {
-        that.slack.send(parsedMessage);
-      }
     }
 
     if(err.length) {
@@ -86,42 +88,18 @@ function SlackGun(options) {
 	};
 };
 
-function getMessage(body, options) {
+function getMessage(body, options, callback) {
   debug('Parsing Mailgun message.');
+  var err;
 
   if(typeof body === 'undefined') {
-    debug('Unable to parse message from Mailgun.');
-    return false;
+    return callback('Unable to parse message from Mailgun.');
   }
 
-  var defaultMessage = {
-    channel: '#general',
-    username: 'Mailgun',
-    icon_emoji: 'mailbox_with_mail',
-    unfurl_links: true,
-    attachments: []
-  };
-
   if(!body.event) {
-    debug('Event type not sent by Mailgun.');
-    return false;
-  } else if(body.event === 'opened') {
-    
-  } else if(body.event === 'clicked') {
-    
-  } else if(body.event === 'unsubscribed') {
-    
-  } else if(body.event === 'complained') {
-    
-  } else if(body.event === 'bounced') {
-    
-  } else if(body.event === 'dropped') {
-    
-  } else if(body.event === 'delivered') {
-    
+    return callback('Event type not sent by Mailgun.');
   } else {
-    debug('Unknown event type from Mailgun.');
-    return false;
+    getTemplate(body, options, callback);
   }
 };
 
@@ -137,12 +115,17 @@ function getOptions(options) {
     options.slack = {};
   }
 
-  if(typeof options.mailgun === 'undefined') {
-    options.mailgun = {};
+  if(!options.slack.hook) {
+    debug('Detected no slack hook url set. Aborting.');
+    throw new Error('You need to set a url for slack communication.');
   }
 
-  if(!options.slack.hook) {
-    throw new Error('You need to set a url for slack communication.');
+  if(!options.slack.channel) options.slack.channel = '#general';
+  if(!options.slack.username) options.slack.username = 'Mailgun';
+  if(!options.slack.icon_emoji) options.slack.icon_emoji = 'mailbox_with_mail';
+
+  if(typeof options.mailgun === 'undefined') {
+    options.mailgun = {};
   }
 
   if(!options.mailgun.apikey) {

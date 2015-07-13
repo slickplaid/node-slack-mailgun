@@ -30,11 +30,11 @@ Now any requests from Mailgun to `/api/mailgun` will be routed to slack as a mes
 
 ### Using it with the build in `http/s` Node.js Module
 
-1
+> Not yet implemented
 
 ### Using it from the command line
 
-2 Not yet implemented
+> Not yet implemented
 
 ## Usage
 
@@ -87,7 +87,7 @@ SlackGun({
 
 ### Option #2 - Attachment Array
 
-Not yet implemented.
+Not yet fully implemented. If you return an array in your custom function (like below), we'll attempt to send it as an attachment instead of text.
 
 ### Option #3 - Custom Function
 
@@ -101,6 +101,7 @@ SlackGun({
 		hook: 'url', // Required. The hook URL for posting messages to slack.
 	},
 	templates: { // Options for templates
+		// You can make this for any event type Mailgun sends
 		all: function(variables, callback) { // callback(error, [string|array]);
 			// Do your magic
 			// We will not do any manipulation on the string or array you return to us.
@@ -120,8 +121,19 @@ SlackGun({
 - [dropped](https://documentation.mailgun.com/user_manual.html#tracking-failures)
 - [delivered](https://documentation.mailgun.com/user_manual.html#tracking-deliveries)
 
+## Tests
+
+Should be available next release.
+
 ## Honey-Do List
 
 - Utilize the real time notification API for Slack. Webhooks are soo 2010.
 - Send emails from Slack through Mailgun to the user that received the email by responding to a message in Slack. That'd be cool.
 - Expand upon security of replay attacks and other possible security issues using Mailgun's webhooks.
+- Rate limiting sending to Slack 1/sec using [node-rate-limiter](https://github.com/jhurliman/node-rate-limiter)
+
+## Contributing
+
+Submit a pull request and add your name to the list below
+
+- This could be you!
