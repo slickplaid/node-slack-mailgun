@@ -78,7 +78,7 @@ SlackGun({
 	},
 	templates: { // Options for templates
 		opened: '*{{recipient}}* _{{event}}_ our email.', // "joe@domain.com clicked our email."
-		clicked: '*{{recipient}}* _{{event}}_ {{url}}', // "joe@domain.com clicked https://example.com/link"
+		clicked: '*{{recipient}}* _{{event}}_ {{{url}}}', // "joe@domain.com clicked https://example.com/link"
 		unsubscribed: '*{{recipient}}* _{{event}}_ from {{mailing-list}}', // "joe@domain.com unsubscribed from maillist@mydomain.com"
 		all: '*{{recipient}}*\n*Event:* _{{event}}_' 
 	}
@@ -130,7 +130,7 @@ Should be available next release.
 - Utilize the real time notification API for Slack. Webhooks are soo 2010.
 - Send emails from Slack through Mailgun to the user that received the email by responding to a message in Slack. That'd be cool.
 - Expand upon security of replay attacks and other possible security issues using Mailgun's webhooks.
-- Rate limiting sending to Slack 1/sec using [node-rate-limiter](https://github.com/jhurliman/node-rate-limiter)
+- [Rate limiting sending to Slack 1/sec](https://api.slack.com/docs/rate-limits) using [node-rate-limiter](https://github.com/jhurliman/node-rate-limiter)
 
 ## Contributing
 
