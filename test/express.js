@@ -6,14 +6,6 @@ var superagent = require('superagent');
 var SlackGun = require('../index');
 var crypto = require('crypto');
 
-var app = express();
-
-app.use('/api/mailgun', bodyParser.json(), SlackGun({
-	slack: { hook: 'http://localhost:4446/' },
-	mailgun: { apikey: '123' }
-}));
-
-app.listen(4448);
 
 var app2 = express();
 
@@ -21,7 +13,24 @@ app2.use('/api/mailgun', bodyParser.json(), SlackGun({
 	slack: { hook: 'http://localhost:4446/' }
 }));
 
-app2.listen(4447);
+var app = express();
+
+app.use('/api/mailgun', bodyParser.json(), SlackGun({
+	slack: { hook: 'http://localhost:4446/' },
+	mailgun: { apikey: '123' }
+}));
+
+var server, server2;
+
+before(function() {
+	server = app.listen(4448);
+	server2 = app2.listen(4447);
+});
+
+after(function() {
+	server.close();
+	server2.close();
+});
 
 var slackTest = express();
 slackTest.use(bodyParser.urlencoded());

@@ -26,8 +26,7 @@ var getOptions = require('./lib/getOptions');
 module.exports = SlackGun;
 
 function SlackGun(options) {
-	var that = this;
-  that = {};
+	var that = this || {};
 
   // Normalize our options and log/throw any problems.
 	that.options = getOptions(options);

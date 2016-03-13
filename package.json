@@ -1,6 +1,6 @@
 {
   "name": "node-slack-mailgun",
-  "version": "0.6.0",
+  "version": "0.7.1",
   "description": "Slack integration for Mailgun notifications.",
   "main": "index.js",
   "scripts": {
