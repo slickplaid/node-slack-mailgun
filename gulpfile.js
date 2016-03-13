@@ -5,6 +5,7 @@ var gutil = require('gulp-util');
 var git = require('gulp-git');
 var minimist = require('minimist');
 var opts = minimist(process.argv.slice(2));
+var fs = require('fs');
 
 gulp.task('bump-version', function() {
   var type = 'patch';
