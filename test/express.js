@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var superagent = require('superagent');
 var SlackGun = require('../index');
 var crypto = require('crypto');
-
+var fixtures = require('./fixtures');
 
 var app2 = express();
 
@@ -50,9 +50,11 @@ describe('Express', function() {
 				.post('http://localhost:4448/api/mailgun')
 				.set('Content-Type', 'application/json')
 				.send({
-					timestamp: timestamp,
-					token: token,
-					signature: signature
+					signature: {
+						timestamp: timestamp,
+						token: token,
+						signature: signature,
+					},
 				})
 				.end(function(err, res) {
 					expect(err).to.not.exist;
@@ -72,9 +74,11 @@ describe('Express', function() {
 				.post('http://localhost:4448/api/mailgun')
 				.set('Content-Type', 'application/json')
 				.send({
-					timestamp: timestamp,
-					token: token,
-					signature: signature
+					signature: {
+						timestamp: timestamp,
+						token: token,
+						signature: signature,
+					},
 				})
 				.end(function(err, res) {
 					expect(err).to.exist;
@@ -93,9 +97,11 @@ describe('Express', function() {
 			superagent
 				.post('http://localhost:4447/api/mailgun')
 				.send({
-					timestamp: timestamp,
-					token: token,
-					signature: signature
+					signature: {
+						timestamp: timestamp,
+						token: token,
+						signature: signature,
+					},
 				})
 				.end(function(err, res) {
 					done(err);
@@ -124,17 +130,12 @@ describe('Express', function() {
 				.post('http://localhost:4448/api/mailgun')
 				.set('Content-Type', 'application/json')
 				.send({
-					'event': 'opened',
-					recipient: email,
-					domain: domain,
-					ip: '0.0.0.0',
-					country: 'US',
-					region: 'Somewhere',
-					city: 'Sometown',
-					useragent: 'test/me',
-					timestamp: timestamp,
-					token: token,
-					signature: signature
+					"signature": {
+						"timestamp": timestamp,
+						"token": token,
+						"signature": signature,
+					},
+					"event-data": fixtures.events.delivered['event-data'],
 				})
 				.end(function(err, res) {
 					expect(err).to.not.exist;

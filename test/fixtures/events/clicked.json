@@ -1,0 +1,43 @@
+{
+    "signature": {
+        "timestamp": "1536964499",
+        "token": "7051cd07af3eac15813c95aff5a110cf6c70bcba66777fe28e",
+        "signature": "a628e20865725afc551c70b73c9f3fe620508a04e91ede08d6526c1caaf9ba5c"
+    },
+    "event-data": {
+        "geolocation": {
+            "country": "US",
+            "region": "CA",
+            "city": "San Francisco"
+        },
+        "url": "https://example.com/i-was-clicked",
+        "tags": [
+            "my_tag_1",
+            "my_tag_2"
+        ],
+        "ip": "50.56.129.169",
+        "recipient-domain": "example.com",
+        "id": "Ase7i2zsRYeDXztHGENqRA",
+        "campaigns": [],
+        "user-variables": {
+            "my_var_1": "Mailgun Variable #1",
+            "my-var-2": "awesome"
+        },
+        "log-level": "info",
+        "timestamp": 1521243339.873676,
+        "client-info": {
+            "client-name": "Chrome",
+            "client-os": "Linux",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31",
+            "device-type": "desktop",
+            "client-type": "browser"
+        },
+        "message": {
+            "headers": {
+                "message-id": "20130503182626.18666.16540@mg.example.com"
+            }
+        },
+        "recipient": "alice@example.com",
+        "event": "clicked"
+    }
+}

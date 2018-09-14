@@ -1,10 +1,13 @@
-require('./helper');
+var chai = require('chai');
+assert = chai.assert;
+expect = chai.expect;
+chai.should();
 var getTemplate = require('../lib/getTemplate');
 var getOptions = require('../lib/getOptions');
 var mustacheTemplates = require('../lib/mustacheTemplates');
 var fs = require('fs');
 var Mustache = require('mustache');
-var body = { recipient: email, url: url, 'event': 'clicked' };
+var fixtures = require('./fixtures');
 
 var options = getOptions({ slack: slackOpts });
 
@@ -15,23 +18,27 @@ describe('Basic Render Tests for Mustache', function() {
 	});
 
 	it('Have default templates for all known event types', function() {
-		eventTypes.forEach(function(ev) {
+		Object.keys(fixtures.events).forEach(function(ev) {
 			assert.equal(fs.existsSync('./templates/'+ev+'.mustache'), true);
 		});
 	});
 
-	it('Render successfully with Mustache', function() {
-		eventTypes.forEach(function(ev) {
-			var text = Mustache.render(mustacheTemplates[ev], eventObjects[ev]);
-			for(var variable in eventObjects[ev]) {
-				var word = eventObjects[ev][variable];
-				assert.equal(text.indexOf(word) > -1, true);
-			}
+	it('Variables used in Mustache templates exist in event-data payload', function() {
+		Object.keys(fixtures.events).forEach(function(ev) {
+			const variables = mustacheTemplates[ev]
+				.match(/{{([\w\d\-\.]+)}}/g)
+				.map(variable => variable.replace(/^{{|}}$/g, ''));
+			const eventData = fixtures.events[ev]['event-data'];
+			variables.forEach((variable) => {
+				const keys = variable.split('.');
+				const value = keys.reduce((result, key) => result[key], eventData);
+				assert.isString(value, `"${variable}" does not exist in the event "${ev}" payload`);
+			})
 		}); 
 	});
 
 	it('Not fail if variables are missing', function() {
-		var text = Mustache.render(mustacheTemplates.dropped, {});
+		var text = Mustache.render(mustacheTemplates.delivered, {});
 		text.should.be.a('string');
 	});
 
@@ -40,14 +47,16 @@ describe('Basic Render Tests for Mustache', function() {
 describe('getTemplate', function() {
 
 	it('Use default templates', function() {
-		getTemplate(body, options, function(err, message) {
+		const eventData = fixtures.events.clicked['event-data'];
+		getTemplate(eventData, options, function(err, message) {
 			expect(err).to.not.exist;
 
-			var expected = { channel: '#custom',
-			  username: 'custom',
-			  icon_emoji: 'test',
-			  unfurl_links: true,
-			  text: '*joe@domain.com* has opened a link: https://mg.exampledomain.com/path' 
+			var expected = {
+				channel: '#custom',
+				username: 'custom',
+				icon_emoji: 'test',
+				unfurl_links: true,
+				text: `*${eventData.recipient}* clicked on ${eventData.url}\n<https://app.mailgun.com/app/logs?event=${eventData.event}|View Logs>`
 			};
 
 			expect(message).to.eql(expected);
@@ -60,7 +69,7 @@ describe('getTemplate', function() {
 			clicked: false
 		};
 
-		getTemplate(body, customOptions, function(err, message) {
+		getTemplate(fixtures.events.clicked['event-data'], customOptions, function(err, message) {
 			expect(err).to.not.be.empty;
 			expect(message).to.be.empty;
 		});
@@ -72,8 +81,8 @@ describe('getTemplate', function() {
 			clicked: '{{recipient}} dropped a click on {{{url}}}'
 		};
 
-		getTemplate(body, customOptions, function(err, message) {
-			message.text.should.equal('joe@domain.com dropped a click on https://mg.exampledomain.com/path');
+		getTemplate(fixtures.events.clicked['event-data'], customOptions, function(err, message) {
+			message.text.should.equal('alice@example.com dropped a click on https://example.com/i-was-clicked');
 		});
 	});
 
@@ -86,8 +95,8 @@ describe('getTemplate', function() {
 			}
 		};
 
-		getTemplate(body, customOptions, function(err, message) {
-			message.text.should.equal('joe@domain.com clicked on https://mg.exampledomain.com/path');
+		getTemplate(fixtures.events.clicked['event-data'], customOptions, function(err, message) {
+			message.text.should.equal('alice@example.com clicked on https://example.com/i-was-clicked');
 		});
 	});
 
@@ -100,8 +109,8 @@ describe('getTemplate', function() {
 			}
 		};
 
-		getTemplate(body, customOptions, function(err, message) {
-			message.text.should.equal('joe@domain.com clicked on https://mg.exampledomain.com/path');
+		getTemplate(fixtures.events.clicked['event-data'], customOptions, function(err, message) {
+			message.text.should.equal('alice@example.com clicked on https://example.com/i-was-clicked');
 		});
 	});
 
@@ -118,8 +127,8 @@ describe('getTemplate', function() {
 			}
 		};
 
-		getTemplate(body, customOptions, function(err, message) {
-			message.text.should.equal('joe@domain.com clicked on https://mg.exampledomain.com/path');
+		getTemplate(fixtures.events.clicked['event-data'], customOptions, function(err, message) {
+			message.text.should.equal('alice@example.com clicked on https://example.com/i-was-clicked');
 		});
 	});
 

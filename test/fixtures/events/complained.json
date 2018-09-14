@@ -1,0 +1,39 @@
+{
+    "signature": {
+        "timestamp": "1536964401",
+        "token": "cfbac48a2bd579a088b15b1fa3a65ba1d09b04b25a96d3f844",
+        "signature": "cc5116d31ef108f9d1fcaf0a1d9f5b00c99bf10a2eaa03ba28244a55fb02aad7"
+    },
+    "event-data": {
+        "tags": [
+            "my_tag_1",
+            "my_tag_2"
+        ],
+        "timestamp": 1521233123.501324,
+        "envelope": {
+            "sending-ip": "173.193.210.33"
+        },
+        "log-level": "warn",
+        "id": "-Agny091SquKnsrW2NEKUA",
+        "campaigns": [],
+        "user-variables": {
+            "my_var_1": "Mailgun Variable #1",
+            "my-var-2": "awesome"
+        },
+        "flags": {
+            "is-test-mode": false
+        },
+        "message": {
+            "headers": {
+                "to": "Alice ",
+                "message-id": "20110215055645.25246.63817@mg.example.com",
+                "from": "Bob ",
+                "subject": "Test complained webhook"
+            },
+            "attachments": [],
+            "size": 111
+        },
+        "recipient": "alice@example.com",
+        "event": "complained"
+    }
+}
