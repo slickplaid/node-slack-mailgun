@@ -71,7 +71,7 @@ describe('getTemplate', function() {
 
 		getTemplate(fixtures.events.clicked['event-data'], customOptions, function(err, message) {
 			expect(err).to.not.be.empty;
-			expect(message).to.be.empty;
+			expect(message).to.be.an('undefined');
 		});
 	});
 
