@@ -43,9 +43,9 @@ function SlackGun(options) {
 
     if(that.options.mailgun.apikey) {
       var apikey = that.options.mailgun.apikey;
-      var token = req.body.token;
-      var timestamp = req.body.timestamp;
-      var signature = req.body.signature;
+      var token = req.body.signature.token;
+      var timestamp = req.body.signature.timestamp;
+      var signature = req.body.signature.signature;
 
       var verification = verifyMailgun(apikey, token, timestamp, signature);
 
@@ -60,7 +60,7 @@ function SlackGun(options) {
     if(!req.body) {
       err.push('Unable to get body from Mailgun request.');
     } else {
-      getMessage(req.body, that.options, function(err, message) {
+      getMessage(req.body['event-data'], that.options, function(err, message) {
         if(err) {
           debug(err);
         } else if(message) {

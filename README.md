@@ -177,4 +177,4 @@ SlackGun({
 
 Submit a pull request and add your name to the list below
 
-- This could be you!
+- [Omar Chehab](https://github.com/omarchehab98)
