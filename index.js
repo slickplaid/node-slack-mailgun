@@ -41,32 +41,42 @@ function SlackGun(options) {
     // have an api key from Mailgun to work with.
     var authentic = true;
 
-    if(that.options.mailgun.apikey) {
+    if (that.options.mailgun.apikey) {
       var apikey = that.options.mailgun.apikey;
-      var token = req.body.signature.token;
-      var timestamp = req.body.signature.timestamp;
-      var signature = req.body.signature.signature;
-
-      var verification = verifyMailgun(apikey, token, timestamp, signature);
-
-      if(!verification.valid) {
+      if (!req.body.signature) {
         authentic = false;
-        err.push('Invalid token response. Mailgun message could not be authenticated.');
+        err.push('Body does not contain signature.');
+      } else {
+        var token = req.body.signature.token;
+        var timestamp = req.body.signature.timestamp;
+        var signature = req.body.signature.signature;
+
+        var verification = verifyMailgun(apikey, token, timestamp, signature);
+
+        if (!verification.valid) {
+          authentic = false;
+          err.push('Invalid token response. Mailgun message could not be authenticated.');
+        }
       }
     } else {
       debug('No api key for Mailgun set. Not validating the authenticity of Mailgun\'s request');
     }
 
-    if(!req.body) {
+    if (!req.body || !req.body['event-data']) {
       err.push('Unable to get body from Mailgun request.');
-    } else {
-      getMessage(req.body['event-data'], that.options, function(err, message) {
-        if(err) {
+    } else if (!err.length) {
+      const [ messageId, domain ] = req.body['event-data'].message.headers['message-id'].split('@');
+      getMessage({
+        ...req.body['event-data'],
+        messageId,
+        domain,
+      }, that.options, function (err, message) {
+        if (err) {
           debug(err);
-        } else if(message) {
+        } else if (message) {
           debug('Sending rendered message to Slack.');
-          that.slack.send(message, function(err, ok) {
-            if(err) {
+          that.slack.send(message, function (err, ok) {
+            if (err) {
               debug(err);
             } else {
               debug(ok);
@@ -74,7 +84,6 @@ function SlackGun(options) {
           });
         }
       });
-
     }
 
     if(err.length) {
