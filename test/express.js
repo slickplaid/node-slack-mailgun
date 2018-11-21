@@ -42,7 +42,7 @@ describe('Express', function() {
 		it('accept express POST with mailgun API key for signature validation', function(done) {
 			var token = 'abc';
 			var timestamp = Date.now();
-			var data = [token, timestamp].join();
+			var data = [timestamp, token].join('');
 			var hmac = crypto.createHmac('sha256', '123').update(data);
 			var signature = hmac.digest('hex');
 
@@ -55,6 +55,7 @@ describe('Express', function() {
 						token: token,
 						signature: signature,
 					},
+					"event-data": fixtures.events.delivered['event-data'],
 				})
 				.end(function(err, res) {
 					expect(err).to.not.exist;
@@ -66,7 +67,7 @@ describe('Express', function() {
 		it('Invalid token should error', function(done) {
 			var token = 'abc';
 			var timestamp = Date.now();
-			var data = [token, timestamp].join();
+			var data = [timestamp + token].join();
 			var hmac = crypto.createHmac('sha256', '1234').update(data);
 			var signature = hmac.digest('hex');
 
@@ -79,6 +80,7 @@ describe('Express', function() {
 						token: token,
 						signature: signature,
 					},
+					"event-data": fixtures.events.delivered['event-data'],
 				})
 				.end(function(err, res) {
 					expect(err).to.exist;
@@ -90,7 +92,7 @@ describe('Express', function() {
 		it('accept express POST without mailgun API key for signature validation', function(done) {
 			var token = 'abc';
 			var timestamp = Date.now();
-			var data = [token, timestamp].join();
+			var data = [timestamp + token].join();
 			var hmac = crypto.createHmac('sha256', '123').update(data);
 			var signature = hmac.digest('hex');
 
@@ -102,6 +104,7 @@ describe('Express', function() {
 						token: token,
 						signature: signature,
 					},
+					"event-data": fixtures.events.delivered['event-data'],
 				})
 				.end(function(err, res) {
 					done(err);
@@ -122,7 +125,7 @@ describe('Express', function() {
 
 			var token = 'abc';
 			var timestamp = Date.now();
-			var data = [token, timestamp].join();
+			var data = [timestamp + token].join();
 			var hmac = crypto.createHmac('sha256', '123').update(data);
 			var signature = hmac.digest('hex');
 
