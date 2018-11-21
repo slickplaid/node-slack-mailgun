@@ -1,5 +1,6 @@
 .*
 !/.gitignore
+!/.eslintrc.*
 
 # Logs
 logs
