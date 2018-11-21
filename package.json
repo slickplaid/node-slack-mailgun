@@ -43,7 +43,9 @@
     "debug": "^4.0.1",
     "express": "^4.13.1",
     "mustache": "^3.0.0",
-    "node-slack": "0.0.7"
+    "node-slack": "0.0.7",
+    "lodash": ">=4.17.5",
+    "minimatch": ">=3.0.2"
   },
   "bin": {
     "slackgun": "standalone.js"
