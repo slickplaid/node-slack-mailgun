@@ -4,7 +4,8 @@
   "description": "Slack integration for Mailgun notifications.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "pretest": "eslint --ignore-path .gitignore ."
   },
   "repository": {
     "type": "git",
@@ -16,7 +17,7 @@
     "notifications",
     "webhook"
   ],
-  "author": "Evan Johnson - Slick Labs, LLC <evan@slicklabs.io> (http://slicklabs.io/)",
+  "author": "Evan Johnson - Slick Labs, LLC <evan@evan.app> (https://evan.app/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/slickplaid/node-slack-mailgun/issues"
@@ -24,6 +25,9 @@
   "homepage": "https://github.com/slickplaid/node-slack-mailgun#readme",
   "devDependencies": {
     "chai": "^4.1.2",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
     "gulp": "^3.9.1",
     "gulp-bump": "^3.1.1",
     "gulp-git": "^2.8.0",
@@ -31,7 +35,7 @@
     "minimist": "^1.1.1",
     "mocha": "^5.2.0",
     "run-sequence": "^2.2.1",
-    "superagent": "^3.8.3"
+    "superagent": "^4.0.0"
   },
   "dependencies": {
     "body-parser": "^1.13.2",

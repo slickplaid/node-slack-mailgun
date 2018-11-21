@@ -48,7 +48,7 @@ gulp.task('create-new-tag', function(cb) {
   function getPackageJsonVersion() {
     //We parse the json file instead of using require because require caches multiple calls so the version number won't be updated
     return JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
-  };
+  }
 });
 
 gulp.task('release', function(callback) {
@@ -61,8 +61,10 @@ gulp.task('release', function(callback) {
     'create-new-tag',
     function(error) {
       if (error) {
+        // eslint-disable-next-line
         console.log(error.message);
       } else {
+        // eslint-disable-next-line
         console.log('RELEASE FINISHED SUCCESSFULLY');
       }
       callback(error);

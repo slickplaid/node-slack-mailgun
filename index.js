@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
- 'use strict';
+'use strict';
 
 /**
  * Module dependencies.
@@ -26,25 +26,23 @@ var getOptions = require('./lib/getOptions');
 module.exports = SlackGun;
 
 function SlackGun(options) {
-	var that = this || {};
+  var that = this || {};
 
   // Normalize our options and log/throw any problems.
-	that.options = getOptions(options);
+  that.options = getOptions(options);
 
   // Initalize node-slack
-	that.slack = new Slack(options.slack.hook, options.slack.options);
+  that.slack = new Slack(options.slack.hook, options.slack.options);
 
-	return function SlackGunMiddleware(req, res, next) {
+  return function SlackGunMiddleware(req, res) {
     var err = [];
 
     // Default to trusting the message if we don't
     // have an api key from Mailgun to work with.
-    var authentic = true;
 
     if (that.options.mailgun.apikey) {
       var apikey = that.options.mailgun.apikey;
       if (!req.body.signature) {
-        authentic = false;
         err.push('Body does not contain signature.');
       } else {
         var token = req.body.signature.token;
@@ -54,7 +52,6 @@ function SlackGun(options) {
         var verification = verifyMailgun(apikey, token, timestamp, signature);
 
         if (!verification.valid) {
-          authentic = false;
           err.push('Invalid token response. Mailgun message could not be authenticated.');
         }
       }
@@ -87,10 +84,10 @@ function SlackGun(options) {
     }
 
     if(err.length) {
-  		// We've hit an error. Let mailgun know 
-  		// not to keep hitting us with requests
-  		res.writeHead(406, 'Not Acceptable', { 'Content-Type': 'text/html' });
-  		res.end();
+      // We've hit an error. Let mailgun know 
+      // not to keep hitting us with requests
+      res.writeHead(406, 'Not Acceptable', { 'Content-Type': 'text/html' });
+      res.end();
 
       err.forEach(function(e) {
         debug(e);
@@ -102,12 +99,11 @@ function SlackGun(options) {
       res.end();
     }
 
-	};
-};
+  };
+}
 
 function getMessage(body, options, callback) {
   debug('Parsing Mailgun message.');
-  var err;
 
   if(typeof body === 'undefined') {
     return callback('Unable to parse message from Mailgun.');
@@ -118,4 +114,4 @@ function getMessage(body, options, callback) {
   } else {
     getTemplate(body, options, callback);
   }
-};
+}

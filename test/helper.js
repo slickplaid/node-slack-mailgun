@@ -1,6 +1,19 @@
-var chai = require('chai');
-assert = chai.assert;
-expect = chai.expect;
-chai.should();
+/* eslint-env node, mocha */
+/* global it:false */
 
-slackOpts = { hook: '123', channel: '#custom', username: 'custom', icon_emoji: 'test', options: { proxy: 'example.com' } };
+var chai = require('chai');
+
+module.exports = {
+  assert: chai.assert,
+  expect: chai.expect,
+  should: chai.should(),
+  slackOpts: {
+    hook: '123',
+    channel: '#custom',
+    username: 'custom',
+    icon_emoji: 'test',
+    options: {
+      proxy: 'example.com'
+    }
+  }
+};
